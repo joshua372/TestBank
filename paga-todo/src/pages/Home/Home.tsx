@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Avatar from "@mui/material/Avatar";
 import { Banks } from '@/data/bank';
 
-import { peticionBank } from '@/service/service';
+// import { peticionBank } from '@/service/service';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBank } from '@/redux/states/bank';
+import { AppStore } from '@/redux/store';
 
 export interface HomeInterface {}
 
 const pageSize = 5
 
 const Home: React.FC<HomeInterface>  = () => {
+
+	const dispatch = useDispatch()
+
+	const stateBank = useSelector((store: AppStore) => store.bank)
+
 	const columns: GridColDef[] = [
 		{ 
 			field: 'id', 
@@ -44,11 +52,14 @@ const Home: React.FC<HomeInterface>  = () => {
 			}
 		},
 	]
-	// console.log(Banks)
-	console.log(peticionBank)
+	
+	useEffect(() =>{
+		dispatch(addBank(Banks))
+	}, [])
+
 	return (	
 		<DataGrid 
-		rows={Banks} 
+		rows={stateBank} 
 		columns={columns} 
 		disableRowSelectionOnClick
 		autoHeight
